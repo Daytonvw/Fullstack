@@ -26,7 +26,6 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
 </body>
 </html>
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -105,7 +104,7 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
             <label for="band_naam">Band Naam:</label>
             <input type="text" name="band_naam" required>
 
-            <label for="genre">Genre:</label>
+            <label for "genre">Genre:</label>
             <select name="genre" required>
                 <option value="Rock">Rock</option>
                 <option value="Pop">Pop</option>
@@ -138,27 +137,36 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
     </div>
 
     <h1>Combineer band en event</h1>
-    <div class="form-container">
-        <form method="post" action="process_form.php?type=2">
-            <label for="band_naam">Band Naam:</label>
-            <select name="band_naam" required>
-                <option value="Dayton">Dayton</option>
-                <option value="Shaayan">Shaayan</option>
-                <!-- Add more band options here -->
-            </select>
-
-            <label for="naam_event">Naam event:</label>
-            <select name="naam_event" required>
-                <option value="Robot">Robot</option>
-                <option value="Voetbal">Voetbal</option>
-                <!-- Add more event options here -->
-            </select>
-
-            <input type="submit" class="submit-button" value="Submit">
-        </form>
-    </div>
+    <form method="post" action="process_form.php?type=2">
+        <h2>Koppel band aan event</h2>
+        <?php
+        $con = mysqli_connect("localhost", "root", "", "fullstack");
+        $eventQuery = mysqli_query($con, "SELECT * FROM event");
+        $bandQuery = mysqli_query($con, "SELECT * FROM band");
+        ?>
+        <select name="band">
+            <?php
+            while ($band = mysqli_fetch_array($bandQuery)) {
+            ?>
+                <option value="<?php echo $band['band_naam']; ?>"><?php echo $band['band_naam']; ?></option>
+            <?php
+            }
+            ?>
+        </select>
+        <select name="event">
+            <?php
+            while ($event = mysqli_fetch_array($eventQuery)) {
+            ?>
+                <option value="<?php echo $event['naam_event']; ?>"><?php echo $event['naam_event']; ?></option>
+            <?php
+            }
+            ?>
+        </select>
+        <input type="submit" value="Submit">
+    </form>
 
     <!-- Add a button to view the agenda.php page -->
     <button class="agenda-button" type="button" onclick="window.location.href='agenda.php'">Agenda</button>
 </body>
 </html>
+
