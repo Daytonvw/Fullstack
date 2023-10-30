@@ -52,8 +52,10 @@
         }
 
         // Query to fetch data from the 'band_event' table along with additional data from 'band' and 'event' tables
-        $query = "SELECT be.naam_event, GROUP_CONCAT(DISTINCT be.naam_band) AS naam_band, 
-                        GROUP_CONCAT(DISTINCT b.genre) AS genre, e.datum, e.aanvangstijd, e.entreeprijs
+        $query = "SELECT be.naam_event,
+                         GROUP_CONCAT(DISTINCT be.naam_band SEPARATOR ', ') AS naam_band,
+                         GROUP_CONCAT(DISTINCT b.genre SEPARATOR ', ') AS genre,
+                         e.datum, e.aanvangstijd, e.entreeprijs
                   FROM band_event be
                   INNER JOIN band b ON be.naam_band = b.band_naam
                   INNER JOIN event e ON be.naam_event = e.naam_event
