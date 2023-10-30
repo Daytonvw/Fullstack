@@ -104,7 +104,7 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
             <label for="band_naam">Band Naam:</label>
             <input type="text" name="band_naam" required>
 
-            <label for "genre">Genre:</label>
+            <label for="genre">Genre:</label>
             <select name="genre" required>
                 <option value="Rock">Rock</option>
                 <option value="Pop">Pop</option>
