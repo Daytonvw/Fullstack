@@ -33,6 +33,10 @@
         <tr>
             <th>Band Naam</th>
             <th>Event Naam</th>
+            <th>Genre</th>
+            <th>Datum</th>
+            <th>Aanvangstijd</th>
+            <th>Entreeprijs</th>
         </tr>
         <?php
         // Replace with your database connection code
@@ -47,8 +51,11 @@
             die("Connection failed: " . $conn->connect_error);
         }
 
-        // Query to fetch data from the 'band_event' table
-        $query = "SELECT naam_band, naam_event FROM band_event";
+        // Query to fetch data from the 'band_event' table along with additional data from 'band' and 'event' tables
+        $query = "SELECT be.naam_band, be.naam_event, b.genre, e.datum, e.aanvangstijd, e.entreeprijs
+                  FROM band_event be
+                  INNER JOIN band b ON be.naam_band = b.band_naam
+                  INNER JOIN event e ON be.naam_event = e.naam_event";
         $result = $conn->query($query);
 
         if ($result->num_rows > 0) {
@@ -56,10 +63,14 @@
                 echo "<tr>";
                 echo "<td>" . $row["naam_band"] . "</td>";
                 echo "<td>" . $row["naam_event"] . "</td>";
+                echo "<td>" . $row["genre"] . "</td>";
+                echo "<td>" . $row["datum"] . "</td>";
+                echo "<td>" . $row["aanvangstijd"] . "</td>";
+                echo "<td>" . $row["entreeprijs"] . "</td>";
                 echo "</tr>";
             }
         } else {
-            echo "<tr><td colspan='2'>No data available.</td></tr>";
+            echo "<tr><td colspan='6'>No data available.</td></tr>";
         }
 
         $conn->close();
