@@ -31,8 +31,8 @@
 
     <table>
         <tr>
-            <th>Band Naam</th>
             <th>Event Naam</th>
+            <th>Band Naam</th>
             <th>Genre</th>
             <th>Datum</th>
             <th>Aanvangstijd</th>
@@ -52,17 +52,20 @@
         }
 
         // Query to fetch data from the 'band_event' table along with additional data from 'band' and 'event' tables
-        $query = "SELECT be.naam_band, be.naam_event, b.genre, e.datum, e.aanvangstijd, e.entreeprijs
+        $query = "SELECT be.naam_event, GROUP_CONCAT(DISTINCT be.naam_band) AS naam_band, 
+                        GROUP_CONCAT(DISTINCT b.genre) AS genre, e.datum, e.aanvangstijd, e.entreeprijs
                   FROM band_event be
                   INNER JOIN band b ON be.naam_band = b.band_naam
-                  INNER JOIN event e ON be.naam_event = e.naam_event";
+                  INNER JOIN event e ON be.naam_event = e.naam_event
+                  GROUP BY be.naam_event, e.datum, e.aanvangstijd, e.entreeprijs
+                  ORDER BY e.datum, e.aanvangstijd"; // Sort by date and start time
         $result = $conn->query($query);
 
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo "<tr>";
-                echo "<td>" . $row["naam_band"] . "</td>";
                 echo "<td>" . $row["naam_event"] . "</td>";
+                echo "<td>" . $row["naam_band"] . "</td>";
                 echo "<td>" . $row["genre"] . "</td>";
                 echo "<td>" . $row["datum"] . "</td>";
                 echo "<td>" . $row["aanvangstijd"] . "</td>";
@@ -78,3 +81,4 @@
     </table>
 </body>
 </html>
+
